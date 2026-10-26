@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="vi"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- 8.1 -->
+    <title layout:title-pattern="$CONTENT_TITLE | $LAYOUT_TITLE">Student Manager</title>
+
+    <!-- 8.2 -->
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/students}">Student Manager</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNav">
+            <ul class="navbar-nav ms-auto">
+                <!-- 8.3 -->
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/students}"
+                       th:classappend="${activeMenu == 'list'} ? 'active'">Danh sách</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/students/new}"
+                       th:classappend="${activeMenu == 'new'} ? 'active'">Thêm mới</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<main class="container my-4 flex-grow-1">
+    <!-- 8.4 -->
+    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${successMessage}">Thành công</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span th:text="${errorMessage}">Lỗi</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <!-- 8.5 -->
+    <section layout:fragment="content">
+        <p>Nội dung trang con sẽ thay thế ở đây.</p>
+    </section>
+</main>
+
+<footer class="bg-dark text-white-50 text-center py-3">
+    <!-- 8.6 -->
+    &copy; <span th:text="${#temporals.year(#temporals.createNow())}">2026</span> HSF302 – Student Manager
+</footer>
+
+<!-- 8.7 -->
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>
