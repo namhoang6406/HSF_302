@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="vi"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main}">
+<head>
+    <title>Chi tiết sinh viên</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="card shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <!-- 14.1 -->
+            <h4 class="mb-0" th:text="|${student.studentCode} - ${student.fullName}|">SE180001 - Nguyễn Văn A</h4>
+            <!-- 14.2 -->
+            <span class="badge"
+                  th:classappend="${student.active} ? 'text-bg-success' : 'text-bg-secondary'"
+                  th:text="${student.active} ? 'Đang học' : 'Bảo lưu'">Đang học</span>
+        </div>
+        <div class="card-body">
+            <!-- 14.3 -->
+            <dl class="row mb-0">
+                <dt class="col-sm-3">Mã sinh viên</dt>
+                <dd class="col-sm-9" th:text="${student.studentCode}">SE180001</dd>
+
+                <dt class="col-sm-3">Họ tên</dt>
+                <dd class="col-sm-9" th:text="${student.fullName}">Nguyễn Văn A</dd>
+
+                <dt class="col-sm-3">Email</dt>
+                <dd class="col-sm-9">
+                    <a th:href="|mailto:${student.email}|"
+                       th:text="${student.email} ?: 'Chưa cập nhật'">a@fpt.edu.vn</a>
+                </dd>
+
+                <dt class="col-sm-3">Ngày sinh</dt>
+                <dd class="col-sm-9"
+                    th:text="|${#temporals.format(student.dateOfBirth, 'dd/MM/yyyy')} (${student.age} tuổi)|">
+                    01/01/2004 (22 tuổi)
+                </dd>
+
+                <dt class="col-sm-3">Ngành</dt>
+                <dd class="col-sm-9"
+                    th:text="${student.major} + ' - ' + (${majors[student.major]} ?: 'Không xác định')">
+                    SE - Kỹ thuật phần mềm
+                </dd>
+
+                <dt class="col-sm-3">GPA</dt>
+                <dd class="col-sm-9" th:text="${#numbers.formatDecimal(student.gpa, 1, 2)} + ' / 10'">8.00 / 10</dd>
+
+                <dt class="col-sm-3">Xếp loại</dt>
+                <dd class="col-sm-9" th:text="${student.rank}">Giỏi</dd>
+
+                <dt class="col-sm-3">Học bổng</dt>
+                <dd class="col-sm-9"
+                    th:text="${student.gpa ge 8.0 and student.active}
+                             ? 'Đủ điều kiện xét học bổng' : 'Không đủ điều kiện'">
+                    Đủ điều kiện xét học bổng
+                </dd>
+            </dl>
+
+            <!-- 14.4 (bonus): cùng kết quả nhưng dùng th:object + *{...} -->
+            <hr>
+            <div th:object="${student}" class="small text-muted">
+                <span>Selection expression → </span>
+                <span th:text="*{fullName}">Nguyễn Văn A</span> –
+                <span th:text="*{email}">a@fpt.edu.vn</span>
+            </div>
+        </div>
+        <div class="card-footer">
+            <!-- 14.5 -->
+            <a th:href="@{/students}" class="btn btn-secondary">← Quay lại</a>
+            <a th:href="@{/students/{id}/edit(id=${student.id})}" class="btn btn-warning">Sửa</a>
+        </div>
+    </div>
+</section>
+</body>
+</html>
