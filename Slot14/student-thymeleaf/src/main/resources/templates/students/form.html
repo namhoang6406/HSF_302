@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="vi"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main}">
+<head>
+    <!-- 15.1 -->
+    <title th:text="${student.id == null} ? 'Thêm sinh viên' : 'Cập nhật sinh viên'">Form sinh viên</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <!-- 15.2 -->
+                    <h4 class="mb-0"
+                        th:text="${student.id == null} ? 'Thêm sinh viên mới'
+                                 : 'Cập nhật sinh viên: ' + ${student.studentCode}">
+                        Thêm sinh viên mới
+                    </h4>
+                </div>
+                <div class="card-body">
+
+                    <!-- 15.3 -->
+                    <form th:action="@{/students/save}" th:object="${student}" method="post" novalidate>
+
+                        <!-- 15.4 -->
+                        <input type="hidden" th:field="*{id}">
+
+                        <!-- 16.1 -->
+                        <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
+                            <strong>Vui lòng sửa các lỗi sau:</strong>
+                            <ul class="mb-0">
+                                <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Lỗi</li>
+                            </ul>
+                        </div>
+
+                        <div class="row g-3">
+                            <!-- 15.5 + 16.2 -->
+                            <div class="col-md-6">
+                                <label for="studentCode" class="form-label">Mã sinh viên <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" placeholder="VD: SE180001"
+                                       th:field="*{studentCode}" th:errorclass="is-invalid">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('studentCode')}"
+                                     th:errors="*{studentCode}"></div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="fullName" class="form-label">Họ tên <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control"
+                                       th:field="*{fullName}" th:errorclass="is-invalid">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('fullName')}"
+                                     th:errors="*{fullName}"></div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control"
+                                       th:field="*{email}" th:errorclass="is-invalid">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}"
+                                     th:errors="*{email}"></div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="dateOfBirth" class="form-label">Ngày sinh <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control"
+                                       th:field="*{dateOfBirth}" th:errorclass="is-invalid">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('dateOfBirth')}"
+                                     th:errors="*{dateOfBirth}"></div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="gpa" class="form-label">GPA (0 - 10) <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" placeholder="VD: 8.5"
+                                       th:field="*{gpa}" th:errorclass="is-invalid">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('gpa')}"
+                                     th:errors="*{gpa}"></div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="major" class="form-label">Ngành <span class="text-danger">*</span></label>
+                                <!-- 15.6 -->
+                                <select class="form-select" th:field="*{major}" th:errorclass="is-invalid">
+                                    <option value="">-- Chọn ngành --</option>
+                                    <option th:each="m : ${majors}"
+                                            th:value="${m.key}"
+                                            th:text="|${m.key} - ${m.value}|">SE - Kỹ thuật phần mềm</option>
+                                </select>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('major')}"
+                                     th:errors="*{major}"></div>
+                            </div>
+
+                            <div class="col-12">
+                                <!-- 15.7 -->
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" th:field="*{active}">
+                                    <label class="form-check-label" th:for="${#ids.prev('active')}">Đang học</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 d-flex gap-2">
+                            <!-- 15.8 -->
+                            <button type="submit" class="btn btn-primary"
+                                    th:text="*{id == null} ? 'Thêm mới' : 'Lưu thay đổi'">Lưu</button>
+                            <a th:href="@{/students}" class="btn btn-secondary">Hủy</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>
