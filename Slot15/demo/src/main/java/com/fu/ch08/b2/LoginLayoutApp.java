@@ -70,9 +70,65 @@ public class LoginLayoutApp extends Application {
     }
 
     // TODO 3: Center — GridPane (form) → VBox (card) → StackPane (căn giữa)
-    // TODO 4: Xử lý sự kiện đăng nhập, thoát, listener
     private Node buildCenter() {
-        return new Region();
+        Label lblTitle = new Label("ĐĂNG NHẬP");
+        lblTitle.setStyle("-fx-font-size: 20; -fx-font-weight: bold;");
+
+        TextField tfUser = new TextField(rememberedUser == null ? "" : rememberedUser);
+        tfUser.setPromptText("Username");
+        PasswordField pfPass = new PasswordField();
+        pfPass.setPromptText("Password");
+        CheckBox chkRemember = new CheckBox("Ghi nhớ đăng nhập");
+        chkRemember.setSelected(rememberedUser != null);
+        Label lblError = new Label();
+        lblError.setStyle("-fx-text-fill: #d93025;");
+        lblError.setWrapText(true);
+
+        // 3a. GridPane: cột 0 cố định 80px, cột 1 giãn theo chiều ngang
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.add(new Label("Username"), 0, 0);
+        grid.add(tfUser, 1, 0);
+        grid.add(new Label("Password"), 0, 1);
+        grid.add(pfPass, 1, 1);
+        grid.add(chkRemember, 1, 2);
+        ColumnConstraints c0 = new ColumnConstraints(80);
+        ColumnConstraints c1 = new ColumnConstraints();
+        c1.setHgrow(Priority.ALWAYS);
+        grid.getColumnConstraints().addAll(c0, c1);
+
+        // 3b. HBox 2 nút giãn đều: maxWidth = MAX_VALUE + hgrow ALWAYS
+        Button btnLogin = new Button("Đăng nhập");
+        Button btnExit = new Button("Thoát");
+        btnLogin.setDefaultButton(true);            // Enter
+        btnExit.setCancelButton(true);              // ESC
+        for (Button b : List.of(btnLogin, btnExit)) {
+            b.setMaxWidth(Double.MAX_VALUE);
+            HBox.setHgrow(b, Priority.ALWAYS);
+        }
+        HBox actions = new HBox(10, btnLogin, btnExit);
+
+        // 3c. VBox card: rộng tối đa 380, cao vừa nội dung
+        VBox card = new VBox(14, lblTitle, grid, lblError, actions);
+        card.setAlignment(Pos.TOP_CENTER);
+        card.setPadding(new Insets(24));
+        card.setMaxWidth(380);
+        card.setMaxHeight(Region.USE_PREF_SIZE);    // không bị StackPane kéo giãn theo chiều cao
+        card.setStyle("-fx-background-color: white; -fx-background-radius: 8;"
+                + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 12, 0, 0, 3);");
+
+        // 3d. StackPane mặc định căn giữa node con
+        StackPane center = new StackPane(card);
+        center.setPadding(new Insets(20));
+        center.setStyle("-fx-background-color: #eceff1;");
+
+        // TODO 4: Xử lý sự kiện đăng nhập, thoát, listener
+
+        track(grid);
+        track(actions);
+        track(card);
+        return track(center);
     }
 
     // TODO 5: Footer — HBox: CheckBox debug | spacer | bản quyền
