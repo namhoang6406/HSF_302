@@ -105,6 +105,10 @@ public class DrinkOrderApp extends Application {
         btnCalc.setOnAction(this::handleCalc);
 
         // TODO 5: Cách 2 — lambda (phổ biến nhất)
+        btnClear.setOnAction(e -> {
+            reset();
+            log("Bấm Làm lại");
+        });
 
         // TODO 6: Cách 3 — anonymous class (viết "dài" để hiểu bản chất: EventHandler là interface 1 method handle)
 
