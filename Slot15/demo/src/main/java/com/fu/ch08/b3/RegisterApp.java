@@ -149,6 +149,26 @@ public class RegisterApp extends Application {
 
     // TODO 4: Đăng ký sự kiện
     private void registerEvents() {
+        // 4a. Ô gõ chữ: validate khi RỜI KHỎI ô (mất focus) — không làm phiền khi đang gõ
+        onFocusLost(tfFullName, this::vFullName);
+        onFocusLost(tfEmail, this::vEmail);
+        onFocusLost(tfUsername, this::vUsername);
+        onFocusLost(pfPassword, this::vPassword);
+        onFocusLost(pfConfirm, this::vConfirm);
+
+        // 4b. Control dạng chọn: validate ngay khi giá trị đổi
+        tgGender.selectedToggleProperty().addListener((obs, o, n) -> vGender());
+        dpDob.valueProperty().addListener((obs, o, n) -> vDob());
+        cbMajor.valueProperty().addListener((obs, o, n) -> vMajor());
+
+        // 4c. Độ mạnh mật khẩu — cập nhật theo TỪNG PHÍM gõ
+        pfPassword.textProperty().addListener((obs, o, n) -> updateStrength(n));
+
+        // 4d. Nút
+        btnRegister.setOnAction(e -> handleRegister());
+        btnReset.setOnAction(e -> {
+            if (AlertUtil.confirm("Xóa toàn bộ dữ liệu đã nhập?")) resetForm();
+        });
     }
 
     private void onFocusLost(Node node, BooleanSupplier validator) {
