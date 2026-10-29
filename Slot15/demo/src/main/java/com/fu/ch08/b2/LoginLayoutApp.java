@@ -178,7 +178,31 @@ public class LoginLayoutApp extends Application {
 
     // TODO 6: Trang chủ — BorderPane: top header, left menu VBox, center lời chào
     private Parent buildHomeView(String user) {
-        return new Region();
+        containers.clear();
+        Label lblHello = new Label("Xin chào, " + user + "!");
+        lblHello.setStyle("-fx-font-size: 22;");
+
+        VBox menu = new VBox(8);
+        for (String item : List.of("Trang chủ", "Sinh viên", "Môn học", "Điểm")) {
+            Button b = new Button(item);
+            b.setMaxWidth(Double.MAX_VALUE);        // VBox: nút giãn bằng chiều rộng menu
+            b.setOnAction(e -> lblHello.setText("Bạn đang ở: " + item));
+            menu.getChildren().add(b);
+        }
+        Region spacer = new Region();
+        VBox.setVgrow(spacer, Priority.ALWAYS);     // đẩy nút Đăng xuất xuống đáy
+        Button btnLogout = new Button("Đăng xuất");
+        btnLogout.setMaxWidth(Double.MAX_VALUE);
+        btnLogout.setOnAction(e -> scene.setRoot(buildLoginView()));
+        menu.getChildren().addAll(spacer, btnLogout);
+        menu.setPadding(new Insets(10));
+        menu.setPrefWidth(160);
+        menu.setStyle("-fx-background-color: #37474f;");
+
+        BorderPane root = new BorderPane(new StackPane(lblHello));  // BorderPane(center)
+        root.setTop(buildHeader());
+        root.setLeft(menu);
+        return root;
     }
 
     private <T extends Region> T track(T region) {
