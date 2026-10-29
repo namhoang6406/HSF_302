@@ -149,6 +149,11 @@ public class DrinkOrderApp extends Application {
         });
 
         // TODO 10: MouseEvent
+        btnCalc.setOnMouseEntered(e -> btnCalc.setStyle("-fx-background-color: #1a73e8; -fx-text-fill: white;"));
+        btnCalc.setOnMouseExited(e -> btnCalc.setStyle(""));
+        taLog.setOnMouseClicked(e -> {
+            if (e.getClickCount() == 2) taLog.clear();
+        });
     }
 
     // TODO 11: Xử lý chính — đọc giá trị, validate, tính tiền
