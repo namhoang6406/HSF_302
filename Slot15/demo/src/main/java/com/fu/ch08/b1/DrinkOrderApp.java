@@ -125,6 +125,13 @@ public class DrinkOrderApp extends Application {
         tfName.setOnAction(e -> cbDrink.requestFocus());
 
         // TODO 7: Một handler dùng chung cho nhiều CheckBox — phân biệt bằng getSource()
+        EventHandler<ActionEvent> onCheck = e -> {
+            CheckBox src = (CheckBox) e.getSource();
+            log("%s: %s".formatted(src.getText(), src.isSelected() ? "chọn" : "bỏ chọn"));
+        };
+        chkPearl.setOnAction(onCheck);
+        chkJelly.setOnAction(onCheck);
+        chkLessSugar.setOnAction(onCheck);
 
         // TODO 8: ChangeListener — lắng nghe GIÁ TRỊ thay đổi (do người dùng hoặc do code)
 
