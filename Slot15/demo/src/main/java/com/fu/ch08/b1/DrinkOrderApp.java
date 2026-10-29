@@ -158,6 +158,30 @@ public class DrinkOrderApp extends Application {
 
     // TODO 11: Xử lý chính — đọc giá trị, validate, tính tiền
     private void handleCalc(ActionEvent e) {
+        String name = tfName.getText().trim();
+        String drink = cbDrink.getValue();
+        String qtyText = tfQty.getText();
+
+        if (name.isEmpty()) { showError("Vui lòng nhập tên khách"); tfName.requestFocus(); return; }
+        if (drink == null) { showError("Vui lòng chọn đồ uống"); cbDrink.requestFocus(); return; }
+        if (tgSize.getSelectedToggle() == null) { showError("Vui lòng chọn size"); return; }
+        int qty = qtyText.isEmpty() ? 0 : Integer.parseInt(qtyText);   // an toàn vì listener chỉ cho gõ số
+        if (qty < 1 || qty > 20) { showError("Số lượng từ 1 đến 20"); tfQty.requestFocus(); return; }
+
+        RadioButton size = (RadioButton) tgSize.getSelectedToggle();
+        int unit = MENU.get(drink) + (int) size.getUserData();
+        if (chkPearl.isSelected()) unit += TOPPING_PRICE;
+        if (chkJelly.isSelected()) unit += TOPPING_PRICE;
+        int total = unit * qty;
+        boolean discount = qty >= 5;
+        if (discount) total = total * 90 / 100;
+
+        lblResult.setStyle("-fx-text-fill: #188038; -fx-font-weight: bold;");
+        lblResult.setText("%s: %d × %s size %s%s → %,d đ%s".formatted(
+                name, qty, drink, size.getText().charAt(0),
+                chkLessSugar.isSelected() ? " (ít đường)" : "",
+                total, discount ? " (đã giảm 10%)" : ""));
+        log("Tính tiền: %,d đ".formatted(total));
     }
 
     private void showError(String msg) {
