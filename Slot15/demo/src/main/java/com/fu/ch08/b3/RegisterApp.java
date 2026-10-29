@@ -94,7 +94,42 @@ public class RegisterApp extends Application {
 
     // TODO 3: Giao diện — GridPane 2 cột, mỗi ô nhập kèm label lỗi bên dưới
     private Parent buildRegisterView() {
-        return new Region();
+        GridPane grid = new GridPane();
+        grid.setHgap(12);
+        grid.setVgap(6);
+        int r = 0;
+        addField(grid, r++, "Họ tên *", tfFullName, errFullName);
+        addField(grid, r++, "Email *", tfEmail, errEmail);
+        addField(grid, r++, "Username *", tfUsername, errUsername);
+        HBox strength = new HBox(8, pbStrength, lblStrength);
+        strength.setAlignment(Pos.CENTER_LEFT);
+        addField(grid, r++, "Mật khẩu *", new VBox(4, pfPassword, strength), errPassword);
+        addField(grid, r++, "Xác nhận MK *", pfConfirm, errConfirm);
+        addField(grid, r++, "Giới tính *", new HBox(15, rbMale, rbFemale, rbOther), errGender);
+        addField(grid, r++, "Ngày sinh *", dpDob, errDob);
+        addField(grid, r++, "Ngành *", cbMajor, errMajor);
+        addField(grid, r++, "Sở thích", new FlowPane(12, 6, chkSport, chkMusic, chkGame, chkReading), null);
+
+        ColumnConstraints c0 = new ColumnConstraints(110);
+        ColumnConstraints c1 = new ColumnConstraints();
+        c1.setHgrow(Priority.ALWAYS);
+        grid.getColumnConstraints().addAll(c0, c1);
+
+        Label title = new Label("ĐĂNG KÝ TÀI KHOẢN");
+        title.setStyle("-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #1a73e8;");
+
+        HBox actions = new HBox(10, btnRegister, btnReset);
+        actions.setAlignment(Pos.CENTER_RIGHT);
+
+        Hyperlink linkLogin = new Hyperlink("Đã có tài khoản? Đăng nhập");
+        linkLogin.setOnAction(e -> scene.setRoot(buildLoginView("")));
+
+        VBox form = new VBox(12, title, grid, chkAgree, actions, linkLogin);
+        form.setPadding(new Insets(20));
+
+        ScrollPane sp = new ScrollPane(form);   // cửa sổ nhỏ vẫn cuộn được, không bị cắt
+        sp.setFitToWidth(true);
+        return sp;
     }
 
     private void addField(GridPane grid, int row, String label, Node input, Label error) {
