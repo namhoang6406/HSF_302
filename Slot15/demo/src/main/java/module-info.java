@@ -8,5 +8,6 @@ module fu.de200319.demo {
     exports fu.de200319.demo;
     exports com.fu.ch08.b1;
     exports com.fu.ch08.b2;
+    exports com.fu.ch08.b3;
     exports com.fu.ch08.common;
 }
