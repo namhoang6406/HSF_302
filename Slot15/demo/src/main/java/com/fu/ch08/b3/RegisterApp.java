@@ -67,6 +67,29 @@ public class RegisterApp extends Application {
 
     // TODO 2: Cấu hình control
     private void setupControls() {
+        tfFullName.setPromptText("Nguyễn Văn An");
+        tfEmail.setPromptText("abc@example.com");
+        tfUsername.setPromptText("3–20 ký tự: a-z, 0-9, _");
+        pfPassword.setPromptText("≥ 8 ký tự, có hoa, thường, số, ký tự đặc biệt");
+        pfConfirm.setPromptText("Nhập lại mật khẩu");
+
+        rbMale.setToggleGroup(tgGender);
+        rbFemale.setToggleGroup(tgGender);
+        rbOther.setToggleGroup(tgGender);
+
+        dpDob.setPromptText("Chọn ngày sinh");
+        dpDob.setEditable(false);           // chỉ chọn từ lịch → tránh lỗi gõ sai định dạng
+        dpDob.setMaxWidth(Double.MAX_VALUE);
+
+        cbMajor.getItems().addAll("Kỹ thuật phần mềm", "Trí tuệ nhân tạo", "An toàn thông tin", "Thiết kế đồ họa");
+        cbMajor.setPromptText("-- Chọn ngành --");
+        cbMajor.setMaxWidth(Double.MAX_VALUE);
+
+        pbStrength.setPrefWidth(140);
+
+        // Nút Đăng ký chỉ bật khi đã tích "Đồng ý" — bind thay vì if/else trong handler
+        btnRegister.disableProperty().bind(chkAgree.selectedProperty().not());
+        btnRegister.setDefaultButton(true);
     }
 
     // TODO 3: Giao diện — GridPane 2 cột, mỗi ô nhập kèm label lỗi bên dưới
@@ -135,3 +158,4 @@ public class RegisterApp extends Application {
         launch(args);
     }
 }
+
