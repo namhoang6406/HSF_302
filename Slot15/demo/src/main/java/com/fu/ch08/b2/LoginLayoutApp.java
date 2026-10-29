@@ -123,7 +123,36 @@ public class LoginLayoutApp extends Application {
         center.setPadding(new Insets(20));
         center.setStyle("-fx-background-color: #eceff1;");
 
-        // TODO 4: Xử lý sự kiện đăng nhập, thoát, listener
+        // TODO 4: Xử lý sự kiện
+        btnLogin.setOnAction(e -> {
+            String user = tfUser.getText().trim().toLowerCase();
+            String pass = pfPass.getText();
+            if (user.isEmpty() || pass.isEmpty()) {
+                lblError.setText("Vui lòng nhập đầy đủ username và password");
+                (user.isEmpty() ? tfUser : pfPass).requestFocus();
+                return;
+            }
+            if (!pass.equals(ACCOUNTS.get(user))) {
+                lblError.setText("Sai username hoặc mật khẩu");
+                pfPass.clear();
+                pfPass.requestFocus();
+                return;
+            }
+            rememberedUser = chkRemember.isSelected() ? user : null;
+            scene.setRoot(buildHomeView(user));     // CHUYỂN MÀN HÌNH: đổi root, giữ nguyên Stage & Scene
+        });
+
+        btnExit.setOnAction(e -> {
+            if (AlertUtil.confirm("Bạn muốn thoát ứng dụng?")) Platform.exit();
+        });
+
+        // Gõ lại → xóa thông báo lỗi
+        tfUser.textProperty().addListener((obs, o, n) -> lblError.setText(""));
+        pfPass.textProperty().addListener((obs, o, n) -> {
+            if (!n.isEmpty()) lblError.setText("");
+        });
+
+        Platform.runLater(() -> (tfUser.getText().isEmpty() ? tfUser : pfPass).requestFocus());
 
         track(grid);
         track(actions);
