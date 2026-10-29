@@ -70,8 +70,34 @@ public class DrinkOrderApp extends Application {
         btnCalc.setDefaultButton(true);     // Enter = bấm "Tính tiền"
 
         // TODO 3: Xếp layout (B2 sẽ học kỹ hơn)
+        GridPane form = new GridPane();
+        form.setHgap(10);
+        form.setVgap(10);
+        form.addRow(0, new Label("Tên khách:"), tfName);
+        form.addRow(1, new Label("Đồ uống:"), cbDrink);
+        form.addRow(2, new Label("Size:"), new HBox(15, rbS, rbM, rbL));
+        form.addRow(3, new Label("Tùy chọn:"), new HBox(15, chkPearl, chkJelly, chkLessSugar));
+        form.addRow(4, new Label("Số lượng:"), tfQty);
+
+        HBox buttons = new HBox(10, btnCalc, btnClear);
+        buttons.setAlignment(Pos.CENTER_RIGHT);
+
+        Label title = new Label("ĐẶT ĐỒ UỐNG");
+        title.setStyle("-fx-font-size: 18; -fx-font-weight: bold;");
+
+        VBox root = new VBox(12, title, form, buttons, lblResult, new Label("Nhật ký sự kiện:"), taLog);
+        root.setPadding(new Insets(16));
+
+        registerEvents();
+
+        Scene scene = new Scene(root, 540, 580);
 
         // TODO 9: Event FILTER trên Scene — chạy ở pha capturing, TRƯỚC khi control con nhận phím
+
+        stage.setScene(scene);
+        stage.setTitle("B1 - Controls & Sự kiện");
+        stage.show();
+        tfName.requestFocus();
     }
 
     private void registerEvents() {
