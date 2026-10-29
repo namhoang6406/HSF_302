@@ -270,6 +270,18 @@ public class RegisterApp extends Application {
 
     // TODO 8: Làm lại form
     private void resetForm() {
+        Stream.of(tfFullName, tfEmail, tfUsername, pfPassword, pfConfirm).forEach(TextInputControl::clear);
+        tgGender.selectToggle(null);
+        dpDob.setValue(null);
+        cbMajor.setValue(null);
+        Stream.of(chkSport, chkMusic, chkGame, chkReading, chkAgree).forEach(c -> c.setSelected(false));
+        // KHÔNG gọi btnRegister.setDisable(true): property đã bind → RuntimeException (Phần C.15).
+        // Bỏ tích chkAgree là đủ, binding tự disable nút.
+
+        // Xóa lỗi SAU CÙNG: các listener ở 4b vừa chạy khi reset giá trị và đã ghi lỗi "Vui lòng chọn..."
+        Stream.of(errFullName, errEmail, errUsername, errPassword, errConfirm, errGender, errDob, errMajor)
+                .forEach(l -> l.setText(""));
+        tfFullName.requestFocus();
     }
 
     // TODO 9: Form đăng nhập — kiểm tra với UserStore
