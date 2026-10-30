@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.ui.controller.StudentController">
+    <top>
+        <VBox spacing="10">
+            <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+            <Label text="Student Management System" styleClass="header"/>
+            <HBox spacing="10">
+                <TextField fx:id="searchField" promptText="Search by name or email..."
+                           prefWidth="320" onAction="#handleSearch"/>
+                <Button text="Search" onAction="#handleSearch"/>
+                <Button text="Refresh" onAction="#handleRefresh"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <TableView fx:id="tableView">
+            <columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
+            <placeholder><Label text="No students found"/></placeholder>
+            <columns>
+                <TableColumn text="ID" prefWidth="60">
+                    <cellValueFactory><PropertyValueFactory property="id"/></cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Name" prefWidth="240">
+                    <cellValueFactory><PropertyValueFactory property="name"/></cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Email" prefWidth="260">
+                    <cellValueFactory><PropertyValueFactory property="email"/></cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Age" prefWidth="80">
+                    <cellValueFactory><PropertyValueFactory property="age"/></cellValueFactory>
+                </TableColumn>
+            </columns>
+        </TableView>
+    </center>
+
+    <right>
+        <VBox spacing="8" prefWidth="300">
+            <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+            <Label text="Student Form" styleClass="subheader"/>
+            <Label text="ID:"/>
+            <TextField fx:id="idField" editable="false" promptText="(auto)"/>
+            <Label text="Name:"/>
+            <TextField fx:id="nameField" promptText="Full name"/>
+            <Label text="Email:"/>
+            <TextField fx:id="emailField" promptText="name@fpt.edu.vn"/>
+            <Label text="Age:"/>
+            <TextField fx:id="ageField" promptText="18 - 60"/>
+            <HBox spacing="8">
+                <Button text="Add" onAction="#handleAdd" styleClass="btn-primary"/>
+                <Button fx:id="btnUpdate" text="Update" onAction="#handleUpdate" styleClass="btn-warning"/>
+                <Button fx:id="btnDelete" text="Delete" onAction="#handleDelete" styleClass="btn-danger"/>
+                <Button text="Clear" onAction="#handleClear"/>
+            </HBox>
+            <Label fx:id="messageLabel" wrapText="true" styleClass="msg"/>
+        </VBox>
+    </right>
+
+    <bottom>
+        <HBox>
+            <padding><Insets top="5" right="10" bottom="5" left="10"/></padding>
+            <Label fx:id="statusLabel" text="Ready"/>
+        </HBox>
+    </bottom>
+</BorderPane>
