@@ -11,3 +11,4 @@
     <Label fx:id="lblWelcome" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
     <Button text="Đăng xuất" onAction="#handleLogout"/>
 </VBox>
+
