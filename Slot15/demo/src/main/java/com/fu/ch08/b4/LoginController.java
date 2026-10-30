@@ -1,11 +1,16 @@
 package com.fu.ch08.b4;
 
+import com.fu.ch08.common.AlertUtil;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.Map;
 
 public class LoginController {
@@ -64,9 +69,29 @@ public class LoginController {
 
     // TODO 6: Mở FXML thứ 2 và TRUYỀN DỮ LIỆU qua controller
     private void openWelcome(String user, String role, Stage loginStage) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("welcome-view.fxml"));
+            Parent root = loader.load();
+            WelcomeController ctrl = loader.getController();
+            ctrl.setUser(user, role);
+
+            Stage stage = new Stage();
+            stage.setTitle("Chào mừng");
+            stage.setScene(new Scene(root, 360, 200));
+            stage.show();
+            loginStage.close();
+        } catch (IOException ex) {
+            AlertUtil.error("Không mở được màn hình chào mừng: " + ex.getMessage());
+        }
     }
 
     @FXML
     private void handleForgot() {
+        TextInputDialog d = new TextInputDialog();
+        d.setHeaderText("Nhập email để lấy lại mật khẩu");
+        d.showAndWait().ifPresent(email -> {
+            if (email.matches("^[\\w.+-]+@[\\w-]+(\\.[\\w-]+)+$")) AlertUtil.info("Đã gửi hướng dẫn tới " + email);
+            else AlertUtil.warn("Email không hợp lệ");
+        });
     }
 }
