@@ -1,0 +1,11 @@
+/* TODO 2: resources/com/fu/ch08/b4/login.css */
+.login-pane { -fx-background-color: linear-gradient(to bottom, #ffffff, #e8f0fe); -fx-font-family: "Segoe UI"; }
+.title      { -fx-font-size: 22; -fx-font-weight: bold; -fx-text-fill: #1a73e8; }
+.error      { -fx-text-fill: #d93025; }
+.text-field:focused, .password-field:focused { -fx-border-color: #1a73e8; -fx-border-radius: 3; }
+.primary-btn {
+    -fx-background-color: #1a73e8; -fx-text-fill: white; -fx-font-weight: bold;
+    -fx-padding: 8 18; -fx-background-radius: 5; -fx-cursor: hand;
+}
+.primary-btn:hover    { -fx-background-color: #1558b0; }
+.primary-btn:disabled { -fx-opacity: 0.5; }
