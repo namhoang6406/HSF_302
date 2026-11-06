@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add New Device</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: Arial, Helvetica, sans-serif; background: #f4f6f9; color: #1c2530; margin: 0; }
+        .container { max-width: 750px; margin: 30px auto; padding: 0 16px; }
+        .panel { background: #fff; border-radius: 8px; padding: 24px; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+        h2 { margin-top: 0; }
+        .alert { padding: 10px 14px; border-radius: 4px; margin-bottom: 16px; font-weight: bold; }
+        .alert-success { background: #d4edda; color: #155724; border: 1px solid #b6dfc0; }
+        .form-row { display: flex; gap: 20px; margin-bottom: 16px; flex-wrap: wrap; }
+        .field { flex: 1 1 260px; }
+        .field label { display: block; font-weight: bold; margin-bottom: 4px; }
+        .field input[type=text], .field select {
+            width: 100%; padding: 7px 10px; border: 1px solid #99a3ad; border-radius: 4px; font-size: 14px;
+        }
+        .error-text { color: #c0392b; font-size: 13px; margin-top: 4px; }
+        .hint { color: #6b7583; font-size: 13px; margin-top: 4px; }
+        .btn { display: inline-block; padding: 7px 16px; border: 1px solid #1a5276; border-radius: 4px;
+            background: #2471a3; color: #fff; text-decoration: none; cursor: pointer; font-size: 14px; }
+        .btn:hover { background: #1a5276; }
+        .btn-outline { background: #fff; color: #2471a3; }
+        .btn-outline:hover { background: #eaf2f8; }
+        .actions { margin-top: 20px; display: flex; gap: 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="panel">
+        <h2>Add New Device</h2>
+        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+        <form th:action="@{/add}" th:object="${DeviceDTO}" method="post" novalidate="novalidate">
+            <div class="form-row">
+                <div class="field">
+                    <label for="deviceCode">Device Code:</label>
+                    <input type="text" id="deviceCode" th:field="*{deviceCode}">
+                    <div class="error-text" th:if="${#fields.hasErrors('deviceCode')}" th:errors="*{deviceCode}"></div>
+                </div>
+                <div class="field">
+                    <label for="categoryId">Category:</label>
+                    <select id="categoryId" th:field="*{categoryId}">
+                        <option value="">-- Select category --</option>
+                        <option th:each="c : ${categories}" th:value="${c.categoryId}" th:text="${c.categoryName}"></option>
+                    </select>
+                    <div class="error-text" th:if="${#fields.hasErrors('categoryId')}" th:errors="*{categoryId}"></div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="field">
+                    <label for="deviceName">Device Name:</label>
+                    <input type="text" id="deviceName" th:field="*{deviceName}">
+                    <div class="error-text" th:if="${#fields.hasErrors('deviceName')}" th:errors="*{deviceName}"></div>
+                </div>
+                <div class="field">
+                    <label for="price">Price ($):</label>
+                    <input type="text" id="price" th:field="*{price}">
+                    <div class="error-text" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="field">
+                    <label for="warrantyMonths">Warranty (months):</label>
+                    <input type="text" id="warrantyMonths" th:field="*{warrantyMonths}">
+                    <div class="error-text" th:if="${#fields.hasErrors('warrantyMonths')}" th:errors="*{warrantyMonths}"></div>
+                </div>
+                <div class="field">
+                    <label for="installationDate">Installation Date (dd/MM/yyyy):</label>
+                    <input type="text" id="installationDate" placeholder="dd/MM/yyyy" th:field="*{installationDate}">
+                    <div class="error-text" th:if="${#fields.hasErrors('installationDate')}" th:errors="*{installationDate}"></div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="field">
+                    <label for="status">Status:</label>
+                    <select id="status" th:field="*{status}">
+                        <option th:each="s : ${statuses}" th:value="${s.key}" th:text="${s.value}"></option>
+                    </select>
+                    <div class="error-text" th:if="${#fields.hasErrors('status')}" th:errors="*{status}"></div>
+                    <div class="hint">(AC-Active, IN-Inactive, DR-Draft)</div>
+                </div>
+            </div>
+            <div class="actions">
+                <button type="submit" class="btn">Save</button>
+                <a th:href="@{/}" class="btn btn-outline">Back</a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

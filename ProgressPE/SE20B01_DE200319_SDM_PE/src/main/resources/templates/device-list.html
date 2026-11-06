@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Device Management</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: Arial, Helvetica, sans-serif; background: #f4f6f9; color: #1c2530; margin: 0; }
+        .container { max-width: 1000px; margin: 30px auto; padding: 0 16px; }
+        .panel { background: #fff; border-radius: 8px; padding: 24px; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+        h2 { margin-top: 0; }
+        .alert { padding: 10px 14px; border-radius: 4px; margin-bottom: 16px; font-weight: bold; }
+        .alert-success { background: #d4edda; color: #155724; border: 1px solid #b6dfc0; }
+        .alert-danger { background: #f8d7da; color: #7a1f27; border: 1px solid #eec2c6; }
+        .alert-info { background: #d9edf7; color: #1b4f6b; border: 1px solid #bcdff0; }
+        .toolbar { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+        .toolbar label { font-weight: bold; }
+        .toolbar input[type=text] { padding: 7px 10px; border: 1px solid #99a3ad; border-radius: 4px; width: 240px; }
+        .btn { display: inline-block; padding: 7px 16px; border: 1px solid #1a5276; border-radius: 4px;
+            background: #2471a3; color: #fff; text-decoration: none; cursor: pointer; font-size: 14px; }
+        .btn:hover { background: #1a5276; }
+        .btn-outline { background: #fff; color: #2471a3; }
+        .btn-outline:hover { background: #eaf2f8; }
+        .ms-auto { margin-left: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #ccd3da; padding: 8px 10px; text-align: left; }
+        thead th { background: #2c3e50; color: #fff; }
+        tbody tr:nth-child(even) { background: #f4f6f9; }
+        a.action { color: #1a5276; text-decoration: none; font-weight: 600; }
+        a.action.danger { color: #c0392b; }
+        a.action:hover { text-decoration: underline; }
+        /* Q2 confirm dialog: plain CSS/JS modal, no Bootstrap / no internet needed */
+        .modal-overlay {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5);
+            align-items: center; justify-content: center; z-index: 1000;
+        }
+        .modal-overlay.show { display: flex; }
+        .modal-box { background: #fff; border-radius: 8px; width: 400px; max-width: 90%; padding: 20px; }
+        .modal-box h5 { margin-top: 0; }
+        .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="panel">
+        <h2>Smart Device Management</h2>
+        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+        <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+        <form class="toolbar" method="get" th:action="@{/}">
+            <label for="deviceName">Device Name:</label>
+            <input type="text" id="deviceName" name="deviceName" th:value="${keyword}"
+                   placeholder="Enter device name...">
+            <button type="submit" class="btn">Search</button>
+            <a th:href="@{/add}" class="btn btn-outline ms-auto">Add New</a>
+        </form>
+        <div th:if="${#lists.isEmpty(devices)}" class="alert alert-info">No records found</div>
+        <table th:unless="${#lists.isEmpty(devices)}">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Code</th>
+                <th>Device Name</th>
+                <th>Category</th>
+                <th>Price ($)</th>
+                <th>Installation Date</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="device, iter : ${devices}">
+                <td th:text="${iter.count}"></td>
+                <td th:text="${device.deviceCode}"></td>
+                <td th:text="${device.deviceName}"></td>
+                <td th:text="${device.category.categoryName}"></td>
+                <td th:text="${device.price}"></td>
+                <td th:text="${#temporals.format(device.installationDate, 'dd/MM/yyyy')}"></td>
+                <td>
+                    <span th:if="${device.status == 'AC'}">Active</span>
+                    <span th:if="${device.status == 'IN'}">Inactive</span>
+                    <span th:if="${device.status == 'DR'}">Draft</span>
+                </td>
+                <td>
+                    <a class="action" th:href="@{'/view/' + ${device.deviceId}}">View</a> |
+                    <a class="action danger" href="javascript:void(0);"
+                       th:attr="data-id=${device.deviceId}, data-name=${device.deviceName}"
+                       onclick="confirmDelete(this)">Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Q2 - Screen 2: Confirmation dialog, plain CSS/JS modal (no Bootstrap, no alert()/confirm(), no internet) -->
+<div class="modal-overlay" id="confirmModal">
+    <div class="modal-box">
+        <h5>Confirmation</h5>
+        <p id="confirmText"></p>
+        <div class="modal-actions">
+            <form id="deleteForm" method="post" style="margin:0;">
+                <button type="submit" class="btn">Yes</button>
+            </form>
+            <button type="button" class="btn btn-outline" onclick="closeConfirmModal()">No</button>
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    function confirmDelete(link) {
+        var id = link.getAttribute('data-id');
+        var name = link.getAttribute('data-name');
+        document.getElementById('confirmText').textContent = 'Are you sure you want to delete "' + name + '"?';
+        document.getElementById('deleteForm').action = '/delete/' + id;
+        document.getElementById('confirmModal').classList.add('show');
+    }
+    function closeConfirmModal() {
+        document.getElementById('confirmModal').classList.remove('show');
+    }
+</script>
+</body>
+</html>
